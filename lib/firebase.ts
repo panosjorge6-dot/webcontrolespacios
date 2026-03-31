@@ -12,10 +12,16 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+// Check if we have at least an API key to avoid crash during build
+const isConfigValid = !!firebaseConfig.apiKey;
+
+// Initialize Firebase only if we are in the browser or have a valid config
+const app = getApps().length > 0 
+  ? getApp() 
+  : (isConfigValid ? initializeApp(firebaseConfig) : null);
+
+const auth = app ? getAuth(app) : ({} as any);
+const db = app ? getFirestore(app) : ({} as any);
+const storage = app ? getStorage(app) : ({} as any);
 
 export { app, auth, db, storage };
