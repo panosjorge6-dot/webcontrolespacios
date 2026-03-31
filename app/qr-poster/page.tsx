@@ -1,9 +1,38 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Navbar } from '@/components/navbar';
 import { motion } from 'framer-motion';
-import { QrCode, ArrowRight, CheckCircle, MapPin, Sparkles, Coffee, Zap } from 'lucide-react';
+import { QrCode, Sparkles, Coffee, Zap, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
+function QRScanner() {
+  const [qrUrl, setQrUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const origin = window.location.origin;
+      const fullUrl = `${origin}/check-in?secret=GENION_PETRER_2024`;
+      setQrUrl(`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(fullUrl)}`);
+    }
+  }, []);
+
+  return (
+    <div className="p-6 bg-white rounded-3xl shadow-inner border-2 border-primary/5">
+       {qrUrl ? (
+          <img 
+            src={qrUrl}
+            alt="QR de Check-in Genion Lab"
+            className="w-56 h-56 transition-opacity duration-1000 opacity-100"
+          />
+       ) : (
+          <div className="w-56 h-56 flex items-center justify-center bg-muted/20 animate-pulse text-[10px] uppercase font-black tracking-widest text-primary/40">
+             Generando QR...
+          </div>
+       )}
+    </div>
+  );
+}
 
 export default function QRPosterPage() {
   return (
@@ -26,21 +55,13 @@ export default function QRPosterPage() {
            </h1>
         </div>
 
-        {/* QR Zone - Automatic Generation */}
+        {/* QR Zone */}
         <div className="relative group">
            <div className="w-80 h-80 rounded-[40px] border-8 border-primary/20 bg-white flex flex-col items-center justify-center space-y-4 transition-all hover:scale-[1.02] hover:shadow-2xl">
-              <div className="p-4 bg-white rounded-2xl">
-                 {/* This API generates the QR code for us automatically */}
-                 <img 
-                   src={`https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${typeof window !== 'undefined' ? window.location.origin : ''}/check-in?secret=GENION_PETRER_2024`}
-                   alt="QR de Check-in Genion Lab"
-                   className="w-56 h-56"
-                 />
-              </div>
+              <QRScanner />
               <p className="text-[10px] font-black uppercase tracking-widest text-primary/60">QR Único de Genion Lab</p>
            </div>
            
-           {/* Decorative Elements */}
            <motion.div 
              animate={{ rotate: 360 }}
              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -49,21 +70,21 @@ export default function QRPosterPage() {
         </div>
 
         {/* Steps */}
-        <div className="grid grid-cols-3 gap-8 w-full max-w-2xl">
+        <div className="grid grid-cols-3 gap-8 w-full max-w-2xl px-4">
            <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center mx-auto text-xl font-black shadow-lg shadow-primary/20">1</div>
-              <h4 className="font-black text-sm uppercase tracking-widest">Escanea</h4>
-              <p className="text-xs text-muted-foreground font-medium">Enfoca con tu móvil <br/>la cámara normal</p>
+              <h4 className="font-black text-xs uppercase tracking-widest">Escanea</h4>
+              <p className="text-[10px] text-muted-foreground font-medium">Usa la cámara <br/>de tu móvil</p>
            </div>
            <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-zinc-900 text-white flex items-center justify-center mx-auto text-xl font-black shadow-lg shadow-zinc-900/20">2</div>
-              <h4 className="font-black text-sm uppercase tracking-widest">Confirma</h4>
-              <p className="text-xs text-muted-foreground font-medium">Valida tu reserva <br/>para hoy</p>
+              <h4 className="font-black text-xs uppercase tracking-widest">Confirma</h4>
+              <p className="text-[10px] text-muted-foreground font-medium">Valida tu reserva <br/>para hoy</p>
            </div>
            <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center mx-auto text-xl font-black shadow-lg shadow-emerald-500/20">3</div>
-              <h4 className="font-black text-sm uppercase tracking-widest">Disfruta</h4>
-              <p className="text-xs text-muted-foreground font-medium">Café y WiFi <br/>listos para ti</p>
+              <h4 className="font-black text-xs uppercase tracking-widest">Disfruta</h4>
+              <p className="text-[10px] text-muted-foreground font-medium">Café y WiFi <br/>listos para ti</p>
            </div>
         </div>
 
@@ -76,18 +97,15 @@ export default function QRPosterPage() {
            </div>
            <div className="text-right">
               <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Tu coworking en Petrer</p>
-              <p className="text-sm font-bold">genionlab.petrer.app</p>
+              <p className="text-sm font-bold opacity-80">genionlab.petrer.vercel.app</p>
            </div>
         </div>
         
-        {/* Print Instruction Button - Hidden on Print */}
+        {/* Print Instruction Button */}
         <div className="pt-8 print:hidden">
            <Button onClick={() => window.print()} className="gap-2 h-14 px-8 rounded-2xl font-black shadow-xl">
-              Imprimir mi Cartel Oficial
+              Imprimir Cartel de Entrada
            </Button>
-           <p className="text-[10px] text-muted-foreground mt-4 font-bold uppercase tracking-widest leading-relaxed">
-             * Se recomienda imprimir en tamaño A3 o A4 para la entrada.
-           </p>
         </div>
 
       </main>
