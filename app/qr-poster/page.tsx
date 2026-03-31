@@ -26,13 +26,18 @@ export default function QRPosterPage() {
            </h1>
         </div>
 
-        {/* QR Zone - The User can print this and the QR will be in the middle */}
+        {/* QR Zone - Automatic Generation */}
         <div className="relative group">
-           <div className="w-80 h-80 rounded-[40px] border-8 border-primary/20 bg-muted/5 flex flex-col items-center justify-center space-y-4 transition-all hover:scale-[1.02] hover:bg-white hover:shadow-2xl">
-              <div className="w-64 h-64 border-4 border-dashed border-primary/30 rounded-3xl flex flex-col items-center justify-center text-primary/40">
-                 <QrCode size={120} strokeWidth={1} />
-                 <p className="text-[10px] font-black uppercase tracking-widest mt-4">Pega tu Código QR aquí</p>
+           <div className="w-80 h-80 rounded-[40px] border-8 border-primary/20 bg-white flex flex-col items-center justify-center space-y-4 transition-all hover:scale-[1.02] hover:shadow-2xl">
+              <div className="p-4 bg-white rounded-2xl">
+                 {/* This API generates the QR code for us automatically */}
+                 <img 
+                   src={`https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${typeof window !== 'undefined' ? window.location.origin : ''}/check-in?secret=GENION_PETRER_2024`}
+                   alt="QR de Check-in Genion Lab"
+                   className="w-56 h-56"
+                 />
               </div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-primary/60">QR Único de Genion Lab</p>
            </div>
            
            {/* Decorative Elements */}
